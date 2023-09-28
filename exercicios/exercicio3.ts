@@ -10,4 +10,4 @@ function toNumber(value: number | string) {
 
 console.log(toNumber(1));
 console.log(toNumber("1"));
-console.log(toNumber({}));
+// console.log(toNumber({}));

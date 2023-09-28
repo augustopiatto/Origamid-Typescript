@@ -12,4 +12,4 @@ function toNumber(value) {
 }
 console.log(toNumber(1));
 console.log(toNumber("1"));
-console.log(toNumber({}));
+// console.log(toNumber({}));

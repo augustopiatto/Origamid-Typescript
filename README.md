@@ -17,6 +17,7 @@ Para iniciar o projeto, siga os passos abaixo:
 - Clone o repositório em sua máquina local
 - Instale o Typescript executando `npm install -g typescript` (utilizado node v20.1.0 e npm v9.6.6)
 - Execute `tsc -w` para o Typescript gerar arquivos .js toda vez que houver mudança no código
+- Instale a extensão `Live Server` do VSCode e execute
 - Acesse [localhost:5500](http://localhost:5500/)
 
 ## Estrutura de pasta
