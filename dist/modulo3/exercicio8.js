@@ -17,3 +17,4 @@ function openMenu(event) {
     }
 }
 buttonMobile?.addEventListener("pointerdown", openMenu);
+//# sourceMappingURL=exercicio8.js.map

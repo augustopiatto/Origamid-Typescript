@@ -19,3 +19,4 @@ function showProduct(data) {
     </div>
   `;
 }
+//# sourceMappingURL=exercicio4.js.map

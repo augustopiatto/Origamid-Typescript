@@ -12,3 +12,4 @@ function somaTotal(data) {
     }, 0);
     document.body.innerHTML += `<p>${total}</p>`;
 }
+//# sourceMappingURL=exercicio12.js.map

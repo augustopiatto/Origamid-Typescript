@@ -1,4 +1,3 @@
-"use strict";
 function toNumber(value) {
     if (typeof value === "number") {
         return value;

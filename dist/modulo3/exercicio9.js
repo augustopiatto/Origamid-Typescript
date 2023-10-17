@@ -11,3 +11,4 @@ function arredonda(param) {
 }
 console.log(arredonda("7.8"));
 console.log(arredonda(1.1));
+//# sourceMappingURL=exercicio9.js.map

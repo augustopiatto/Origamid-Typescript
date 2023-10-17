@@ -25,3 +25,4 @@ function mostrarCursos(cursos) {
     `;
     });
 }
+//# sourceMappingURL=exercicio5.js.map

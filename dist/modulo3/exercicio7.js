@@ -9,3 +9,4 @@ function changeStyle(element) {
     element.style.color = "red";
     element.style.border = "solid";
 }
+//# sourceMappingURL=exercicio7.js.map

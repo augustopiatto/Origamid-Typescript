@@ -29,3 +29,4 @@ async function handleCursos(data) {
         });
     }
 }
+//# sourceMappingURL=exercicio10.js.map

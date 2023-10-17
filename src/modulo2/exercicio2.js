@@ -1,14 +1,13 @@
-"use strict";
-const input = document.querySelector("input");
-const total = localStorage.getItem("total");
+var input = document.querySelector("input");
+var total = localStorage.getItem("total");
 if (input && total) {
     input.value = total;
     calcularGanho(Number(input.value));
 }
 function calcularGanho(value) {
-    const p = document.querySelector("p");
+    var p = document.querySelector("p");
     if (p) {
-        p.innerText = `ganho total ${value + 100 - value * 0.2}`;
+        p.innerText = "ganho total ".concat(value + 100 - value * 0.2);
     }
 }
 function totalMudou() {
