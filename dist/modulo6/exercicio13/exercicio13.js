@@ -1,6 +1,7 @@
 import { isTransacaoNaoNormalizada } from "./helpers/isInterface.js";
 import stringParaNumber from "./helpers/stringParaNumber.js";
 import stringParaDate from "./helpers/stringParaDate.js";
+import numberParaString from "./helpers/numberParaString.js";
 async function getDados() {
     try {
         const response = await fetch("https://api.origamid.dev/json/transacoes.json");
@@ -44,16 +45,52 @@ function preencheTabela(transacoes) {
       <tr>
         <td>${transacao.nome}</td>
         <td>${transacao.email}</td>
-        <td>R$ ${transacao.valor}</td>
+        <td>R$ ${transacao.valor ? transacao.valor : 0}</td>
         <td>${transacao.formaDePagamento}</td>
         <td>${transacao.status}</td>
       </tr>
     `;
     });
 }
+function somaTotal(transacoes) {
+    const somaParagrafo = document.querySelector("#soma-total");
+    if (!somaParagrafo)
+        return;
+    const valor = transacoes.reduce((acc, cur) => {
+        if (cur.valor) {
+            return acc + cur.valor;
+        }
+        return acc;
+    }, 0);
+    somaParagrafo.innerHTML += `<p>R$ ${numberParaString(valor)}</p>`;
+}
+function somaPorPagamento(transacoes) {
+    const cartaoCredito = document.querySelector("#cartao-credito");
+    const boleto = document.querySelector("#boleto");
+    if (!cartaoCredito && !boleto)
+        return;
+    let somaCartao = 0;
+    let somaBoleto = 0;
+    transacoes.forEach((transacao) => {
+        if (transacao.formaDePagamento === "Cartão de Crédito") {
+            somaCartao += transacao.valor ? transacao.valor : 0;
+        }
+        else {
+            somaBoleto += transacao.valor ? transacao.valor : 0;
+        }
+    });
+    if (cartaoCredito) {
+        cartaoCredito.innerHTML += `<p>Cartão de crédito: <span>R$ ${numberParaString(somaCartao)}</span></p>`;
+    }
+    if (boleto) {
+        boleto.innerHTML += `<p>Boleto: <span>R$ ${numberParaString(somaBoleto)}</span></p>`;
+    }
+}
 const transacoesNaoNormalizadas = await getDados();
 const transacoes = normalizaDados(transacoesNaoNormalizadas);
 if (transacoes && Array.isArray(transacoes)) {
     preencheTabela(transacoes);
+    somaTotal(transacoes);
+    somaPorPagamento(transacoes);
 }
 //# sourceMappingURL=exercicio13.js.map
