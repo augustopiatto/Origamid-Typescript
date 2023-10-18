@@ -1,11 +1,11 @@
 export interface Transacao {
   status: string;
   id: number;
-  data: string;
+  data: Date;
   nome: string;
   formaDePagamento: string;
   email: string;
-  valor: string;
+  valor: number | null;
   clienteNovo: boolean;
 }
 

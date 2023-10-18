@@ -1,4 +1,6 @@
-import { isTransacao, isTransacaoNaoNormalizada, } from "./helpers/isInterface.js";
+import { isTransacaoNaoNormalizada } from "./helpers/isInterface.js";
+import stringParaNumber from "./helpers/stringParaNumber.js";
+import stringParaDate from "./helpers/stringParaDate.js";
 async function getDados() {
     try {
         const response = await fetch("https://api.origamid.dev/json/transacoes.json");
@@ -20,11 +22,11 @@ function normalizaDados(dados) {
                 return {
                     status: dado.Status,
                     id: dado.ID,
-                    data: dado.Data,
+                    data: stringParaDate(dado.Data),
                     nome: dado.Nome,
                     formaDePagamento: dado["Forma de Pagamento"],
                     email: dado.Email,
-                    valor: dado["Valor (R$)"],
+                    valor: stringParaNumber(dado["Valor (R$)"]),
                     clienteNovo: Boolean(dado["Cliente Novo"]),
                 };
             }
@@ -33,13 +35,25 @@ function normalizaDados(dados) {
     }
     return dadosNormalizados;
 }
+function preencheTabela(transacoes) {
+    const tabela = document.querySelector("#transacoes tbody");
+    if (!tabela)
+        return;
+    transacoes.forEach((transacao) => {
+        tabela.innerHTML += `
+      <tr>
+        <td>${transacao.nome}</td>
+        <td>${transacao.email}</td>
+        <td>R$ ${transacao.valor}</td>
+        <td>${transacao.formaDePagamento}</td>
+        <td>${transacao.status}</td>
+      </tr>
+    `;
+    });
+}
 const transacoesNaoNormalizadas = await getDados();
 const transacoes = normalizaDados(transacoesNaoNormalizadas);
 if (transacoes && Array.isArray(transacoes)) {
-    transacoes.forEach((transacao) => {
-        if (isTransacao(transacao)) {
-            document.body.innerHTML += `<p>${transacao.data}</p>`;
-        }
-    });
+    preencheTabela(transacoes);
 }
 //# sourceMappingURL=exercicio13.js.map
