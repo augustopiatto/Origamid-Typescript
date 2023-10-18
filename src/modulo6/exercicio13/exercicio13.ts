@@ -3,6 +3,7 @@ import stringParaNumber from "./helpers/stringParaNumber.js";
 import stringParaDate from "./helpers/stringParaDate.js";
 import { Transacao, TransacaoNaoNormalizada } from "./types";
 import numberParaString from "./helpers/numberParaString.js";
+import countBy from "./helpers/countBy.js";
 
 async function getDados<T>(): Promise<T | null> {
   try {
@@ -51,6 +52,7 @@ function preencheTabela(transacoes: Transacao[]): void {
         <td>R$ ${transacao.valor ? transacao.valor : 0}</td>
         <td>${transacao.formaDePagamento}</td>
         <td>${transacao.status}</td>
+        <td>${transacao.data}</td>
       </tr>
     `;
   });
@@ -69,28 +71,72 @@ function somaTotal(transacoes: Transacao[]): void {
 }
 
 function somaPorPagamento(transacoes: Transacao[]): void {
-  const cartaoCredito = document.querySelector("#cartao-credito");
-  const boleto = document.querySelector("#boleto");
-  if (!cartaoCredito && !boleto) return;
-  let somaCartao = 0;
-  let somaBoleto = 0;
-  transacoes.forEach((transacao) => {
-    if (transacao.formaDePagamento === "Cartão de Crédito") {
-      somaCartao += transacao.valor ? transacao.valor : 0;
-    } else {
-      somaBoleto += transacao.valor ? transacao.valor : 0;
-    }
+  const pagamentoDiv = document.querySelector("#pagamento");
+
+  if (!pagamentoDiv) return;
+
+  const pagamentos = transacoes.map(({ formaDePagamento }) => formaDePagamento);
+  const total = countBy(pagamentos);
+
+  Object.keys(total).forEach((key) => {
+    pagamentoDiv.innerHTML += `<p>${key}: <span>${total[key]}</span></p>`;
   });
-  if (cartaoCredito) {
-    cartaoCredito.innerHTML += `<p>Cartão de crédito: <span>R$ ${numberParaString(
-      somaCartao
-    )}</span></p>`;
-  }
-  if (boleto) {
-    boleto.innerHTML += `<p>Boleto: <span>R$ ${numberParaString(
-      somaBoleto
-    )}</span></p>`;
-  }
+}
+
+function somaPorStatus(transacoes: Transacao[]): void {
+  const statusDiv = document.querySelector("#status");
+
+  if (!statusDiv) return;
+
+  const status = transacoes.map(({ status }) => status);
+  const total = countBy(status);
+
+  Object.keys(total).forEach((key) => {
+    statusDiv.innerHTML += `<p>${key}: <span>${total[key]}</span></p>`;
+  });
+}
+
+const diaDaSemana = {
+  "0": "Domingo",
+  "1": "Segunda",
+  "2": "Terça",
+  "3": "Quarta",
+  "4": "Quinta",
+  "5": "Sexta",
+  "6": "Sábado",
+};
+
+function somaPorData(transacoes: Transacao[]): void {
+  const dataDiv = document.querySelector("#data");
+
+  if (!dataDiv) return;
+
+  const data = transacoes.map(({ data }) => data.getDay());
+  const total = countBy(data);
+
+  Object.keys(total).forEach((key) => {
+    dataDiv.innerHTML += `<p>${
+      diaDaSemana[key as keyof typeof diaDaSemana]
+    }: <span>${total[key]}</span></p>`;
+  });
+}
+
+function diaMaisVendas(transacoes: Transacao[]): void {
+  const diaDiv = document.querySelector("#dia");
+
+  if (!diaDiv) return;
+
+  const data = transacoes.map(({ data }) => data.getDay());
+  const total = countBy(data);
+
+  const diaMaisVendas = Object.entries(total).sort((a, b) => {
+    return b[1] - a[1];
+  })[0];
+  console.log(diaMaisVendas);
+
+  diaDiv.innerHTML += `<p>${
+    diaDaSemana[diaMaisVendas[0] as keyof typeof diaDaSemana]
+  }</p>`;
 }
 
 const transacoesNaoNormalizadas = await getDados<TransacaoNaoNormalizada[]>();
@@ -99,4 +145,7 @@ if (transacoes && Array.isArray(transacoes)) {
   preencheTabela(transacoes);
   somaTotal(transacoes);
   somaPorPagamento(transacoes);
+  somaPorStatus(transacoes);
+  somaPorData(transacoes);
+  diaMaisVendas(transacoes);
 }
