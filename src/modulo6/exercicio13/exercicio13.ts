@@ -1,7 +1,7 @@
 import { isTransacaoNaoNormalizada } from "./helpers/isInterface.js";
 import stringParaNumber from "./helpers/stringParaNumber.js";
 import stringParaDate from "./helpers/stringParaDate.js";
-import { Transacao, TransacaoNaoNormalizada } from "./types";
+import { Transacao, TransacaoNaoNormalizada } from "./helpers/types.js";
 import numberParaString from "./helpers/numberParaString.js";
 import countBy from "./helpers/countBy.js";
 

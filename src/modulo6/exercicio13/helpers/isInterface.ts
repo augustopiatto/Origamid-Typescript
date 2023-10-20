@@ -1,4 +1,4 @@
-import { Transacao, TransacaoNaoNormalizada } from "../types";
+import { Transacao, TransacaoNaoNormalizada } from "./types";
 
 export function isTransacao(value: unknown): value is Transacao {
   if (
